@@ -1,0 +1,24 @@
+Requirements to build:
+
+- gnat-4.7 installation
+- texinfo
+
+
+----------------------------------------------------------------------------
+
+Porting:
+
+- Make GHDL use the cross assembler:
+  -- Implement --AS option for configure and Makefile.inc passed on to
+	ghdl1 via extra flags (do not abuse LIB_CFLAGS)
+
+- Target libraries: zlib
+
+- mingw32msvc support in grt/Makefile.inc
+
+- dbghelp.h: Pull dbghelp2 from https://github.com/vtjnash/dbghelp2.git
+	TODO: Build
+	Workaround:
+  	> make build-ghdllib_cross GRT_FLAGS=-I/usr/i686-w64-mingw32/include/
+
+- Prepare and Build libgrt for cross target:
