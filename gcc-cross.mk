@@ -36,16 +36,14 @@ build-gcc: $(TEST_BUILD)/config.status
 		all-gcc all-target-libgcc
 	touch $@
 
-
 install-gcc: build-gcc
 	$(USE_NATIVE_SANDBOX_PATH); \
 	$(MAKE) -C $(TEST_BUILD) install-gcc install-target-libgcc
 
 
-# # Builds libgcc, libstdc++ and other target stuff,
-# Must be after mingw32/winapi stuff has been compiled
-# To make sure we're not using a locally installed cross compiler,
-# we specify CC_FOR_TARGET in CROSS_EXTRAFLAGS
+# Builds the gnat tools in the cross version.
+# Important: The local gcc version must be the same as GCC_VERSION or
+# in some way compatible, as gnat does not check for sanity.
 build-targetlib: $(ARCH_DEPS) $(TEST_BUILD)/config.status 
 	$(USE_NATIVE_SANDBOX_PATH); \
 	$(MAKE) -C $(TEST_BUILD) $(_MAKE_OPTIONS) \
@@ -69,4 +67,6 @@ clean-targetlib:
 # 3) Then build the gnattools
 
 
-all-gcc-mingw32: install-gcc install-runtime install-targetlib
+all-gcc-mingw32: install-headers install-gcc install-runtime install-targetlib
+
+DUTIES += build-gcc build-targetlib

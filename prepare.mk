@@ -1,4 +1,3 @@
-include config.mk
 
 GHDL_BUILDDIR = $(BUILD_ROOT)/ghdl
 
@@ -9,10 +8,13 @@ UNIFIED_BUILDLIBS += $(GCC_SRC)/mpc
 UNIFIED_BUILDLIBS += $(GCC_SRC)/gmp
 UNIFIED_BUILDLIBS += $(GCC_SRC)/isl
 
-$(UNIFIED_BUILDLIBS): $(GCC_SRC)
-	cd $(GCC_SRC) && sh contrib/download_prerequisites $(NO_VERIFY)
+$(UNIFIED_BUILDLIBS): $(GCC_SRC)/contrib/download_prerequisites
+	cd $(GCC_SRC) && sh $< $(NO_VERIFY)
 
-$(GHDL_BUILDDIR)/config.status: $(GHDL_SRC)/configure
+$(GHDL_BUILDDIR):
+	mkdir $@
+
+$(GHDL_BUILDDIR)/config.status: $(GHDL_SRC)/configure | $(GHDL_BUILDDIR)
 	[ -e $(dir $@) ] || mkdir $(dir $@)
 	cd $(dir $@) && $< \
 		--with-gcc=$(GCC_SRC) \

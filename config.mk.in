@@ -1,0 +1,53 @@
+# Local configuration make settings for ghdl-cross setup
+#
+# Copy this file to config.mk and insert necessary configuration
+
+# You have to edit the locations in this Makefile to make stuff compile.
+
+# unused: PARALLELIZE = -j3
+
+MAKE_OPTIONS = 
+
+# Development version:
+
+VERSION = 0.002
+
+# Command to prepare the build.
+# Workaround for asm/errno.h error:
+# PREPARE_BUILD = export CPLUS_INCLUDE_PATH=/usr/include/x86_64-linux-gnu; \
+	export C_INCLUDE_PATH=/usr/include/x86_64-linux-gnu
+
+# Root toolchain directory
+TOOLCHAIN_SRC = 
+
+# Set to directory where stuff should be built:
+BUILD_ROOT =
+
+# Define when we build GHDL with a cross compiler built in the sandbox:
+# BUILD_FROM_SANDBOX = y
+
+# Source location of binutils:
+BINUTILS_SRC = $(TOOLCHAIN_SRC)/binutils-2.31
+
+# Source location of gcc:
+GCC_SRC = $(TOOLCHAIN_SRC)/gcc-$(GCC_VERSION)
+
+# Source location of ghdl original distribution:
+GHDL_SRC = $(TOOLCHAIN_SRC)/ghdl
+
+# Include optional download rules file
+-include downloads.mk
+-include prepare.mk
+
+# Mingw32 specifics:
+# Unused mingw32 runtime
+# MINGW_RT_SRC = $(TOOLCHAIN_SRC)/mingwrt-5.0.2
+# WIN32API_SRC = $(TOOLCHAIN_SRC)/w32api-5.0.2
+
+# MINGW-w64 source:
+MINGW64_SRC = $(TOOLCHAIN_SRC)/mingw-w64-v3.1.0
+
+# Unused:
+# MINGW_RT_ARCHIVE = /media/scratch/Downloads/mingwrt-3.20-2-mingw32-src.tar.lzma
+
+

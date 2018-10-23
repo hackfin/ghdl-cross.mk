@@ -14,15 +14,7 @@ ifeq ($(MACHINE),aarch64)
 	EXTRA_FLAGS = CFLAGS=-fPIC
 endif
 
-GHDL_BUILDDIR = $(BUILD_ROOT)/ghdl-$(GHDL_VERSION)
 GHDL_GCC_BUILDDIR = $(GHDL_CROSS_BUILDDIR)
-
-
-$(GHDL_BUILDDIR)/config.status: $(GHDL_SRC)/configure
-	[ -e $(dir $@) ] || mkdir $(dir $@)
-	cd $(dir $@) && $< \
-		--with-gcc=$(GCC_SRC) \
-		--prefix=$(INSTALL_PREFIX)
 
 
 VHDL_GCC = $(GCC_SRC)/gcc/vhdl
@@ -38,15 +30,9 @@ $(GHDL_GCC_BUILDDIR)/config.status: $(GHDL_GCC_BUILDDIR)
 		--disable-libgomp --disable-libquadmath --disable-libssp
 	
 
-$(GHDL_BUILDDIR):
+$(GHDL_GCC_BUILDDIR): | $(GHDL_BUILDDIR)
 	[ -e $@ ] || mkdir $@
 
-$(GHDL_GCC_BUILDDIR): $(GHDL_BUILDDIR)
-	[ -e $@ ] || mkdir $@
-
-
-$(VHDL_GCC): $(GHDL_BUILDDIR)/config.status
-	cd $(GHDL_BUILDDIR) && $(MAKE) copy-sources
 
 ghdl: $(GHDL_BUILDDIR)/config.status
 	# Need separate call:
@@ -81,10 +67,11 @@ install-ghdl: build-ghdl
 install-ghdllib: $(GHDL_BUILDDIR)/Makefile
 	$(MAKE) -C $(dir $<) ghdllib install \
 		GHDL_GCC_BIN=$(BOOTSTRAP)/test$(INSTALL_PREFIX)/bin/ghdl \
-		GHDL1_GCC_BIN=--GHDL1=$(BOOTSTRAP)/test$(INSTALL_PREFIX)/libexec/gcc/x86_64-pc-linux-gnu/7.2.0/ghdl1 \
+		GHDL1_GCC_BIN=--GHDL1=$(BOOTSTRAP)/test$(INSTALL_PREFIX)/libexec/gcc/x86_64-pc-linux-gnu/$(GCC_VERSION)/ghdl1 \
 		DESTDIR=$(BOOTSTRAP)/test/
 
 		# prefix=$(BOOTSTRAP)/test$(INSTALL_PREFIX)
 
-
 prepare-ghdl: $(VHDL_GCC)
+
+DUTIES += build-ghdl

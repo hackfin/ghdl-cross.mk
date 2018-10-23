@@ -43,3 +43,5 @@ checkpath:
 
 all: build-gcc-ada install-gcc-ada
 
+DUTIES = build-gcc-ada
+

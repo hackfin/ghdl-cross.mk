@@ -54,14 +54,6 @@ $(GHDL_CROSS_BUILDDIR)/config.status: $(GHDL_CROSS_BUILD)
  		--with-gnu-ld --with-gnu-as \
 		$(CROSS_FLAGS)
 
-#		--with-build-sysroot=$(CROSS_SANDBOX) \
-#		--prefix=$(INSTALL_PREFIX) \
-#		--enable-languages=c,vhdl \
-#		--disable-bootstrap \
-#		--disable-multilib \
-#        --enable-checking \
-#		--with-gnu-ld --with-gnu-as \
-
 build-ghdl_cross: $(GHDL_CROSS_BUILDDIR)/config.status $(GHDL_DEPENDENCIES)
 	$(USE_CROSS_SANDBOX_PATH) ; \
 	$(MAKE) -C $(GHDL_CROSS_BUILDDIR) \
@@ -120,11 +112,6 @@ install-ghdllib_cross: build-ghdllib_cross
 		$(GHDLLIB_OPTIONS) \
 		DESTDIR=$(CROSS_SANDBOX)/ghdl-cross
 
-# Warning: When splitting up build and install, the install rule will
-# rebuild again. When not setting all the above parameters, we'll end up
-# with a broken library...
-
-
 clean-all-cross:
 	rm -fr $(CROSS_SANDBOX)/ghdl-cross build-gcc build-ghdllib_cross
 	rm -f $(GHDLLIB_CROSS_BUILDDIR)/Makefile
@@ -132,6 +119,7 @@ clean-all-cross:
 	# rm -fr $(GHDL_CROSS_BUILDDIR)
 
 ############################################################################
+# Test configuration:
 	
 /tmp/test/config.status:
 	cd $(dir $@) && \
@@ -150,10 +138,10 @@ clean-all-cross:
  		--disable-multilib \
  		--with-gnu-ld --with-gnu-as \
 		--target=$(ARCH)
-#
-# target_configargs="target-winsup" \
 
 testconfig: /tmp/test/config.status
 
 .PHONY: /tmp/test/config.status
+
+DUTIES += build-ghdllib_cross
 

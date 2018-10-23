@@ -1,9 +1,11 @@
+# Rules to cross compile libz
 
 $(BUILD_ROOT)/zlib/config.status:
 	[ -e $(dir $@) ] || mkdir $(dir $@)
 	cd $(dir $@); \
 	$(CROSS_TOOLS) \
-	$(GCC_SRC)/zlib/configure --prefix=$(INSTALL_PREFIX)/$(ARCH)
+	$(GCC_SRC)/zlib/configure --prefix=$(INSTALL_PREFIX)/$(ARCH) \
+		--host=$(ARCH)
 	
 install-libz: $(BUILD_ROOT)/zlib/config.status
 	$(USE_CROSS_SANDBOX_PATH) ; \

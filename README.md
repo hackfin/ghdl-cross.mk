@@ -42,6 +42,11 @@ $ make prepare-ghdl
 
 Depending on whether `BUILD_FROM_SANDBOX` is set, a somewhat sandboxed *cross* compiler is used to build the GHDL target files. If a cross compiler with ADA support and the gnat tools (gnatmake, ...) including all target libraries (like mingw32 runtime) is already installed locally, leave this variable undefined in config.mk
 
+Note: The installed compiler *must* have the same version as `GCC_VERSION`
+defined in config.mk. Since Ada does not check for the proper compiler
+version, compiling may fail. You can make your life easy, if you just
+set `GCC_VERSION` to the installed native (or even cross) compiler.
+
 ### Sandboxed cross compiler
 
 The build rule to build and install the sandboxed compiler:
