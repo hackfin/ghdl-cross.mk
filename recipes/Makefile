@@ -6,8 +6,26 @@
 #
 # > make all-ghdl_cross
 
-# The GCC version to use
-GCC_VERSION = 7.2.0
+# The GCC version to use: Safest is to use same version as installed:
+GCC_VERSION = $(shell gcc --version | \
+	 sed -n 's/^gcc (.*) \([0-9]\.[0-9]\.[0-9]\).*/\1/p')
+
+# Some gcc version hacks:
+ifeq ($(GCC_VERSION),6.3.1)
+	GCC_VERSION = 6.3.0
+endif
+
+ifeq ($(GCC_VERSION),6.3.0)
+GCC_TARFILE = gcc-$(GCC_VERSION).tar.bz2
+else
+ifeq ($(GCC_VERSION),7.2.0)
+GCC_TARFILE = gcc-$(GCC_VERSION).tar.xz
+else
+$(warning "Unsupported GCC version $(GCC_VERSION)")
+GCC_TARFILE ?= gcc-$(GCC_VERSION).tar.xz
+endif
+endif
+
 # Mingw64 version to use
 MINGW64_VERSION = 6.0.0
 
@@ -15,8 +33,6 @@ MINGW64_VERSION = 6.0.0
 ARCH = i686-w64-mingw32
 # ARCH ?= x86_64-linux
 
-# The install prefix to use:
-INSTALL_PREFIX = /usr/local
 
 # include local configuration:
 include config.mk
@@ -63,15 +79,12 @@ include crossconfig.mk
 include gcc-cross.mk
 include ghdl-cross.mk
 
-DUTIES = build-binutils build-gcc
-
 all: install-sandbox all-ghdl_cross
-
 
 $(BUILD_ROOT)/cross-toolchain:
 	mkdir $@
 
-$(CROSS_BUILD): $(BUILD_ROOT)/cross-toolchain
+$(CROSS_BUILD): | $(BUILD_ROOT)/cross-toolchain
 	mkdir $@
 
 install-bootstrap: install-gcc-ada
@@ -80,27 +93,33 @@ install-bootstrap: install-gcc-ada
 # - Headers are present before building cross-GCC
 # - Runtime is compiled by 'bare' compiler
 # - Additional libraries are then compiled against installed runtime
-install-sandbox: install-binutils install-headers install-gcc install-targetlib install-libz 
+install-sandbox: install-binutils install-headers install-gcc \
+	install-target install-libz 
 
-all-ghdl_cross: build-ghdl_cross install-ghdl_cross install-ghdllib_cross install-libbacktrace
+all-ghdl_cross: build-ghdl_cross install-ghdl_cross install-ghdllib_cross \
+	install-libbacktrace
 
 .NOTPARALLEL: all install-sandbox all-ghdl_cross
 
-clean-sandbox:
-	rm -fr $(BOOTSTRAP_BIN)
+check:
+	@echo Building for GCC version: $(GCC_VERSION)
+	@echo GCC_SRC: $(GCC_SRC)
+	@echo GCC tar to download: $(GCC_TARFILE)
 
-clean-bootstrap:
-	rm -fr $(BOOTSTRAP_BIN)$(INSTALL_PREFIX)
-
-clean: clean-sandbox
+clean-stamps:
 	-rm $(DUTIES)
 
+# Run mrproper when changing the config, like GCC_VERSION, ...
+mrproper:
+	rm -fr $(BUILD_ROOT)/cross-toolchain $(SANDBOX_ROOT)
 
 # Rules that don't parallelize:
 
 .NOTPARALLEL: build-gcc
 
 dist:
-	cd ..; tar cfvz ghdl-build.mk.tgz $(notdir $(CURDIR)) \
-		--exclude=.git --exclude=*.swp --exclude=build-* --exclude=install-*
-	cat self-extract.sh ../ghdl-build.mk.tgz >ghdlbuild_sfx.sh
+	cd ..; tar cfvz ghdl-build.mk.tgz recipes \
+		--exclude=.git --exclude=*.swp \
+		--exclude=*.swo \
+		--exclude=build-* --exclude=install-*
+	cat ../self-extract.sh ../ghdl-build.mk.tgz >../ghdlbuild_sfx.sh

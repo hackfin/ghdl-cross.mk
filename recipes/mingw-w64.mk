@@ -41,9 +41,6 @@ clean-mingw64:
 
 install-runtime: install-mingw64
 
-debug:
-	ls $(MINGW_SANDBOX)/config.status
-
 $(CROSS_SANDBOX)/mingw:
 	ln -s $(CROSS_SANDBOX)/$(INSTALL_PREFIX)/$(ARCH) $@
 

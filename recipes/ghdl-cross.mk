@@ -1,7 +1,6 @@
 # Rules to cross-compile GHDL
 #
 #
-GHDL_CROSS_BUILDDIR = $(GHDL_CROSS_BUILD)/ghdl
 
 ifdef BUILD_FROM_SANDBOX
 
@@ -26,17 +25,16 @@ TARGET_TOOLS = \
 endif
 
 $(GHDL_CROSS_BUILD):
-	[ -e $@ ] || mkdir $@
+	mkdir $@
 
 # Fails with:
 # > raised TYPES.UNRECOVERABLE_ERROR : comperr.adb:406
 # - Remove -g from config.status:825
 # > S["CFLAGS"]="-O2" 
 
-$(GHDL_CROSS_BUILDDIR)/config.status: $(GHDL_CROSS_BUILD)
-	[ -e $(GHDL_CROSS_BUILDDIR) ] || mkdir $(GHDL_CROSS_BUILDDIR)
+$(GHDL_CROSS_BUILD)/config.status: $(VHDL_GCC) | $(GHDL_CROSS_BUILD) 
 	cd $(dir $@) && \
-	$(USE_NATIVE_SANDBOX_PATH); \
+	$(USE_CROSS_SANDBOX_PATH); \
 	$(TARGET_TOOLS) \
 	$(TARGET_GHDL_CFLAGS) \
 	$(GCC_SRC)/configure \
@@ -54,29 +52,31 @@ $(GHDL_CROSS_BUILDDIR)/config.status: $(GHDL_CROSS_BUILD)
  		--with-gnu-ld --with-gnu-as \
 		$(CROSS_FLAGS)
 
-build-ghdl_cross: $(GHDL_CROSS_BUILDDIR)/config.status $(GHDL_DEPENDENCIES)
+build-ghdl_cross: $(GHDL_CROSS_BUILD)/config.status $(GHDL_DEPENDENCIES)
 	$(USE_CROSS_SANDBOX_PATH) ; \
-	$(MAKE) -C $(GHDL_CROSS_BUILDDIR) \
+	$(MAKE) -C $(GHDL_CROSS_BUILD) \
 		CFLAGS_FOR_TARGET="$(GHDL_EXTRA_FLAGS)" \
 		$(CROSS_EXTRAFLAGS) \
 		all-gcc all-target
 
 install-ghdl_cross:
 	$(USE_CROSS_SANDBOX_PATH) ; \
-	$(MAKE) -C $(GHDL_CROSS_BUILDDIR) install-gcc install-target \
+	$(MAKE) -C $(GHDL_CROSS_BUILD) install-gcc install-target \
 		DESTDIR=$(CROSS_SANDBOX)/ghdl-cross
 
 ############################################################################
-#
 
-install-libbacktrace: $(GHDL_CROSS_BUILDDIR)/$(ARCH)/libbacktrace/.libs/libbacktrace.a
+LIBBACKTRACE = libbacktrace/.libs/libbacktrace.a
+
+install-libbacktrace: $(GHDL_CROSS_BUILD)/$(ARCH)/$(LIBBACKTRACE)
 	cp $< $(CROSS_SANDBOX)/ghdl-cross$(INSTALL_PREFIX)/lib/ghdl
 
-GHDLLIB_CROSS_BUILDDIR = $(GHDL_CROSS_BUILDDIR)/ghdllib
+GHDLLIB_CROSS_BUILDDIR = $(GHDL_CROSS_BUILD)/ghdllib
 
 $(GHDLLIB_CROSS_BUILDDIR):
 	[ -e $@ ] || mkdir $@
 
+$(GHDL_SRC)/configure: | $(GHDL_SRC)
 
 $(GHDLLIB_CROSS_BUILDDIR)/Makefile: $(GHDL_SRC)/configure $(GHDLLIB_CROSS_BUILDDIR) 
 	cd $(dir $@) && $< \
@@ -115,8 +115,7 @@ install-ghdllib_cross: build-ghdllib_cross
 clean-all-cross:
 	rm -fr $(CROSS_SANDBOX)/ghdl-cross build-gcc build-ghdllib_cross
 	rm -f $(GHDLLIB_CROSS_BUILDDIR)/Makefile
-	rm -f $(GHDL_CROSS_BUILDDIR)/config.status
-	# rm -fr $(GHDL_CROSS_BUILDDIR)
+	rm -f $(GHDL_CROSS_BUILD)/config.status
 
 ############################################################################
 # Test configuration:

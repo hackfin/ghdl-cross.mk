@@ -21,6 +21,7 @@ $(TEST_BUILD)/config.status:
  		--disable-libssp \
 		--prefix=$(CROSS_SANDBOX)$(INSTALL_PREFIX) \
 		--enable-languages=c,c++,ada \
+		--enable-libada \
 		--with-gnu-ld --with-gnu-as \
 		$(CROSS_FLAGS)
 
@@ -38,24 +39,24 @@ build-gcc: $(TEST_BUILD)/config.status
 
 install-gcc: build-gcc
 	$(USE_NATIVE_SANDBOX_PATH); \
-	$(MAKE) -C $(TEST_BUILD) install-gcc install-target-libgcc
+ 	$(MAKE) -C $(TEST_BUILD) install-gcc install-target-libgcc
 
 
 # Builds the gnat tools in the cross version.
 # Important: The local gcc version must be the same as GCC_VERSION or
 # in some way compatible, as gnat does not check for sanity.
-build-targetlib: $(ARCH_DEPS) $(TEST_BUILD)/config.status 
+build-targetlib: $(TEST_BUILD)/config.status | $(ARCH_DEPS) 
 	$(USE_NATIVE_SANDBOX_PATH); \
 	$(MAKE) -C $(TEST_BUILD) $(_MAKE_OPTIONS) \
 		$(CROSS_EXTRAFLAGS) \
 		all-gnattools
 	touch $@
 
-install-targetlib: build-targetlib
+install-target: build-gcc build-targetlib
 	$(USE_NATIVE_SANDBOX_PATH); \
 	$(MAKE) -C $(TEST_BUILD) $(_MAKE_OPTIONS) \
 		$(CROSS_EXTRAFLAGS) \
-		install-gnattools install-target-libgcc
+		install-gcc install-target-libgcc
 
 clean-targetlib:
 	rm -f $(TEST_BUILD)/config.status

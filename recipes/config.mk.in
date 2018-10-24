@@ -10,7 +10,7 @@ MAKE_OPTIONS =
 
 # Development version:
 
-VERSION = 0.002
+VERSION = 0.003
 
 # Command to prepare the build.
 # Workaround for asm/errno.h error:
@@ -25,6 +25,9 @@ BUILD_ROOT =
 
 # Define when we build GHDL with a cross compiler built in the sandbox:
 # BUILD_FROM_SANDBOX = y
+
+# Installation prefix:
+INSTALL_PREFIX = /usr/local
 
 # Source location of binutils:
 BINUTILS_SRC = $(TOOLCHAIN_SRC)/binutils-2.31

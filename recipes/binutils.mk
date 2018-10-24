@@ -1,8 +1,9 @@
+$(BINUTILS_SRC)/configure: | $(BINUTILS)
 
-$(CROSS_BUILD)/binutils/config.status: $(CROSS_BUILD)
+$(CROSS_BUILD)/binutils/config.status: $(BINUTILS_SRC)/configure | $(CROSS_BUILD)
 	[ -e $(CROSS_BUILD)/binutils ] || mkdir $(CROSS_BUILD)/binutils
 	cd $(CROSS_BUILD)/binutils; \
-	$(BINUTILS_SRC)/configure $(CONF_FLAGS) \
+	$< $(CONF_FLAGS) \
 		--target=$(ARCH)
 
 build-binutils: $(CROSS_BUILD)/binutils/config.status

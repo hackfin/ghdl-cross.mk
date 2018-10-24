@@ -18,6 +18,19 @@ GHDL_GCC_BUILDDIR = $(GHDL_CROSS_BUILDDIR)
 
 
 VHDL_GCC = $(GCC_SRC)/gcc/vhdl
+
+$(GHDL_BUILDDIR):
+	mkdir $@
+
+$(GHDL_BUILDDIR)/config.status: $(GHDL_SRC)/configure | $(GHDL_BUILDDIR)
+	[ -e $(dir $@) ] || mkdir $(dir $@)
+	cd $(dir $@) && $< \
+		--with-gcc=$(GCC_SRC) \
+		--prefix=$(INSTALL_PREFIX)
+
+
+$(VHDL_GCC): $(GHDL_BUILDDIR)/config.status
+	cd $(GHDL_BUILDDIR) && $(MAKE) copy-sources
 	
 $(GHDL_GCC_BUILDDIR)/config.status: $(GHDL_GCC_BUILDDIR)
 	$(USE_NATIVE_SANDBOX_PATH); \
