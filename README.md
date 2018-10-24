@@ -45,9 +45,12 @@ The `GCC_VERSION` variable is generated from the locally installed GCC.
 You can of course modify this variable for testing.
 
 Tested versions:
-6.3.0  (Dockerfile, default)                         PASS
-7.2.0  (Dockerfile.gcc-7.2.0)                        TESTING
-7.3.0  (Docker container: reznik/gnat:gpl.2018.slim) FAIL
+
+| GCC version | Docker reference                              | Result    |
+| ----------- | --------------------------------------------- | --------- |
+| 6.3.0       | (Dockerfile, default)                         | PASS      |
+| 7.2.0       | (Dockerfile.gcc-7.2.0)                        | TESTING   |
+| 7.3.0       | (Docker container: reznik/gnat:gpl.2018.slim) | FAIL      |
 
 It is no longer necessary to download the sources manually.
 
@@ -73,8 +76,8 @@ $ make prepare
 Depending on whether `BUILD_FROM_SANDBOX` is set, a somewhat sandboxed *cross* compiler is used to build the GHDL target files. If a cross compiler with ADA support and the gnat tools (gnatmake, ...) including all target libraries (like mingw32 runtime) is already installed locally, leave this variable undefined.
 
 Note: The installed compiler *must* have the same version as `GCC_VERSION`
-defined in `config.mk`. Since Ada does not check for the proper compiler
-version, compiling may fail. By default, the version installed on your system
+defined in `config.mk`. Since GNAT does not check for the proper compiler
+version to compile itself, compiling may fail. By default, the version installed on your system
 (or Docker container used) is selected.
 
 ### Sandboxed cross compiler
