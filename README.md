@@ -1,7 +1,8 @@
 # GHDL cross build scripts
 
 This is a collection of Makefiles to build a cross compiling GHDL, currently at a basic stage and for experienced developers.
-The result is a GHDL binary which produces an executable for instance in a native Linux system that runs on another target, like
+The result is a GHDL binary which produces an executable for instance in a
+native Linux system that runs on another target, like
   - Windows 32 bit (EXE)
   - ARM64 architecture (under construction)
 
@@ -35,7 +36,8 @@ New behaviour: Since local installations make life very difficult for
 proper reproduction, a Dockerfile is supplied for a reference building
 environment.
 
-Enter the `scripts` directory and extract the build scripts by
+Inside the container, enter the `scripts` directory and extract the build
+scripts by
 ```sh
 $ sh ghdlbuild_sfx.sh
 ```
@@ -49,7 +51,7 @@ Tested versions:
 | GCC version | Docker reference                              | Result    |
 | ----------- | --------------------------------------------- | --------- |
 | 6.3.0       | (Dockerfile, default)                         | PASS      |
-| 7.2.0       | (Dockerfile.gcc-7.2.0)                        | TESTING   |
+| 7.2.0       | (Dockerfile.gcc-7.2.0)                        | PASS      |
 | 7.3.0       | (Docker container: reznik/gnat:gpl.2018.slim) | FAIL      |
 
 It is no longer necessary to download the sources manually.
@@ -73,12 +75,16 @@ $ make prepare
 
 ## Building
 
-Depending on whether `BUILD_FROM_SANDBOX` is set, a somewhat sandboxed *cross* compiler is used to build the GHDL target files. If a cross compiler with ADA support and the gnat tools (gnatmake, ...) including all target libraries (like mingw32 runtime) is already installed locally, leave this variable undefined.
+Depending on whether `BUILD_FROM_SANDBOX` is set, a somewhat sandboxed *cross*
+compiler is used to build the GHDL target files. If a cross compiler with Ada
+support and the gnat tools (gnatmake, ...) including all target libraries
+(like mingw32 runtime) is already installed locally, leave this variable
+undefined.
 
 Note: The installed compiler *must* have the same version as `GCC_VERSION`
 defined in `config.mk`. Since GNAT does not check for the proper compiler
-version to compile itself, compiling may fail. By default, the version installed on your system
-(or Docker container used) is selected.
+version to compile itself, compiling may fail. By default, the version
+installed on your system (or Docker container used) is selected.
 
 ### Sandboxed cross compiler
 

@@ -12,7 +12,7 @@ $(TOOLCHAIN_SRC)/binutils-2.31.tar.xz:
 	wget http://ftp.gnu.org/gnu/binutils/binutils-2.31.tar.xz
 
 $(GCC_SRC): $(TOOLCHAIN_SRC)/$(GCC_TARFILE)
-	cd $(TOOLCHAIN_SRC) && \
+	@cd $(TOOLCHAIN_SRC) && \
 	echo "---------------------------------------------------" ; \
 	echo "Unpacking $<, please be patient..." ; \
 	tar xf $< ; \

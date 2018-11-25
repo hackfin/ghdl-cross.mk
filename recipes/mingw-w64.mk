@@ -44,7 +44,7 @@ install-runtime: install-mingw64
 $(CROSS_SANDBOX)/mingw:
 	ln -s $(CROSS_SANDBOX)/$(INSTALL_PREFIX)/$(ARCH) $@
 
-GHDL_DEPENDENCIES = $(CROSS_SANDBOX)/mingw
+# GHDL_DEPENDENCIES = $(CROSS_SANDBOX)/mingw
 
 .PHONY: install-runtime
 

@@ -1,9 +1,27 @@
-# Build GHDL outside gcc:
+# Build rules for native GHDL build outside gcc directory
 #
+# Requires a number of configuration variables:
+#
+# Version of GCC:
+GCC_VERSION ?= 7.2.0
+#
+# Where GCC sources are located:
+# GCC_SRC = $(TOOLCHAIN_SRC)/gcc-$(GCC_VERSION)
+#
+# Where GHDL source is located:
+# GHDL_SRC = $(TOOLCHAIN_SRC)/ghdl.latest
+#
+# Directory root where to install
+INSTALL_ROOT ?= /tmp/ghdl
+#
+# Directory prefix for installation:
+INSTALL_PREFIX ?= /usr
+#
+# Build (scratch) path: Needs quite some storage space.
+BUILD_ROOT ?= /tmp/ghdl_build
 
-
-GHDL_VERSION = 3.5
-
+# Define when building from outside a specific sandbox
+USE_NATIVE_SANDBOX_PATH ?= true
 
 MACHINE = $(shell uname -m)
 
@@ -14,8 +32,9 @@ ifeq ($(MACHINE),aarch64)
 	EXTRA_FLAGS = CFLAGS=-fPIC
 endif
 
-GHDL_GCC_BUILDDIR = $(GHDL_CROSS_BUILDDIR)
+GHDL_GCC_BUILDDIR = $(BUILD_ROOT)/ghdl-native
 
+GHDL_BUILDDIR ?= $(BUILD_ROOT)/ghdl
 
 VHDL_GCC = $(GCC_SRC)/gcc/vhdl
 
@@ -32,9 +51,9 @@ $(GHDL_BUILDDIR)/config.status: $(GHDL_SRC)/configure | $(GHDL_BUILDDIR)
 $(VHDL_GCC): $(GHDL_BUILDDIR)/config.status
 	cd $(GHDL_BUILDDIR) && $(MAKE) copy-sources
 	
-$(GHDL_GCC_BUILDDIR)/config.status: $(GHDL_GCC_BUILDDIR)
+$(GHDL_GCC_BUILDDIR)/config.status: $(GCC_SRC)/configure | $(GHDL_GCC_BUILDDIR)
 	$(USE_NATIVE_SANDBOX_PATH); \
-	cd $(dir $@) && $(GCC_SRC)/configure \
+	cd $(dir $@) && $< \
 		--prefix=$(INSTALL_PREFIX) \
 		--enable-languages=c,vhdl \
 		--disable-bootstrap \
@@ -72,18 +91,17 @@ build-ghdl: $(GHDL_GCC_BUILDDIR)/config.status
 	touch build-ghdl
 
 install-ghdl: build-ghdl
-	cd $(GHDL_GCC_BUILDDIR) && $(MAKE) install DESTDIR=$(BOOTSTRAP)/test
+	cd $(GHDL_GCC_BUILDDIR) && $(MAKE) install DESTDIR=$(INSTALL_ROOT)
 
 ############################################################################
 
 # Build ghdl library with the prefix of the installed GHDL:
 install-ghdllib: $(GHDL_BUILDDIR)/Makefile
 	$(MAKE) -C $(dir $<) ghdllib install \
-		GHDL_GCC_BIN=$(BOOTSTRAP)/test$(INSTALL_PREFIX)/bin/ghdl \
-		GHDL1_GCC_BIN=--GHDL1=$(BOOTSTRAP)/test$(INSTALL_PREFIX)/libexec/gcc/x86_64-pc-linux-gnu/$(GCC_VERSION)/ghdl1 \
-		DESTDIR=$(BOOTSTRAP)/test/
+		GHDL_GCC_BIN=$(INSTALL_ROOT)$(INSTALL_PREFIX)/bin/ghdl \
+		GHDL1_GCC_BIN=--GHDL1=$(INSTALL_ROOT)$(INSTALL_PREFIX)/libexec/gcc/x86_64-pc-linux-gnu/$(GCC_VERSION)/ghdl1 \
+		DESTDIR=$(INSTALL_ROOT)
 
-		# prefix=$(BOOTSTRAP)/test$(INSTALL_PREFIX)
 
 prepare-ghdl: $(VHDL_GCC)
 
