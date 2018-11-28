@@ -9,7 +9,7 @@ native Linux system that runs on another target, like
 ## Tested platforms
 
   - [X] Host: x86\_64  target: i686-mingw-w64-mingw32
-  - [ ] Host: aarch64  target: i686-mingw-w64-mingw32
+  - [X] Host: aarch64  target: i686-mingw-w64-mingw32
   - `[dropped]` Host: x86\_64  target: i586-mingw32
     Dropped due to lacking API support, use i686-mingw-w64-mingw32 instead
   
