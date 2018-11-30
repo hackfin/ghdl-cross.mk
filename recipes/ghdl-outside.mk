@@ -30,7 +30,14 @@ MACHINE = $(shell uname -m)
 # or similar, when forgotten:
 ifeq ($(MACHINE),aarch64)
 	EXTRA_FLAGS = CFLAGS=-fPIC
+	PLATFORM=-unknown-linux-gnu
 endif
+ifeq ($(MACHINE),x86_64)
+	PLATFORM=-pc-linux-gnu
+endif
+
+ARCH=$(MACHINE)$(PLATFORM)
+
 
 GHDL_GCC_BUILDDIR = $(BUILD_ROOT)/ghdl-native
 
@@ -99,7 +106,7 @@ install-ghdl: build-ghdl
 install-ghdllib: $(GHDL_BUILDDIR)/Makefile
 	$(MAKE) -C $(dir $<) ghdllib install \
 		GHDL_GCC_BIN=$(INSTALL_ROOT)$(INSTALL_PREFIX)/bin/ghdl \
-		GHDL1_GCC_BIN=--GHDL1=$(INSTALL_ROOT)$(INSTALL_PREFIX)/libexec/gcc/x86_64-pc-linux-gnu/$(GCC_VERSION)/ghdl1 \
+		GHDL1_GCC_BIN=--GHDL1=$(INSTALL_ROOT)$(INSTALL_PREFIX)/libexec/gcc/$(ARCH)/$(GCC_VERSION)/ghdl1 \
 		DESTDIR=$(INSTALL_ROOT)
 
 
