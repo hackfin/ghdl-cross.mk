@@ -78,8 +78,9 @@ $(GHDLLIB_CROSS_BUILDDIR):
 
 $(GHDL_SRC)/configure: | $(GHDL_SRC)
 
-$(GHDLLIB_CROSS_BUILDDIR)/Makefile: $(GHDL_SRC)/configure $(GHDLLIB_CROSS_BUILDDIR) 
+$(GHDLLIB_CROSS_BUILDDIR)/Makefile: $(GHDL_SRC)/configure | $(GHDLLIB_CROSS_BUILDDIR) 
 	cd $(dir $@) && $< \
+		GNATMAKE=$(CROSS_PREFIX)-gnatmake \
 		AS=$(CROSS_PREFIX)-as \
 		CC=$(CROSS_PREFIX)-gcc \
 		--with-gcc=$(GCC_SRC) --prefix=$(INSTALL_PREFIX)
@@ -88,17 +89,17 @@ GRT_CFLAGS = -I$(GCC_SRC)/zlib
 
 GHDL_PREFIX = $(CROSS_SANDBOX)/ghdl-cross$(INSTALL_PREFIX)
 
-# GHDL library build options to explicitely use installed
-# compiler
+# Where the cross ghdl1 is located:
+GHDL1_BIN = $(GHDL_PREFIX)/libexec/gcc/$(ARCH)/$(GCC_VERSION)/ghdl1
 
+# GHDL library build options to explicitely use installed
+# cross tools:
 GHDLLIB_OPTIONS = \
-	AS=$(CROSS_PREFIX)-as \
-	CC="$(CROSS_PREFIX)-gcc $(GHDL_EXTRA_FLAGS)"\
+	EXEEXT= \
 	GRT_RANLIB=$(CROSS_PREFIX)-ranlib \
-	GNATMAKE=$(CROSS_PREFIX)-gnatmake \
 	GRT_FLAGS="$(GRT_CFLAGS) $(GRT_EXTRA_CFLAGS)" \
 	GHDL_GCC_BIN=$(GHDL_PREFIX)/bin/$(ARCH)-ghdl \
-	GHDL1_GCC_BIN=--GHDL1=$(GHDL_PREFIX)/libexec/gcc/$(ARCH)/$(GCC_VERSION)/ghdl1
+	GHDL1_GCC_BIN=--GHDL1=$(GHDL1_BIN)
 
 
 # Build ghdl library with the prefix of the installed GHDL:

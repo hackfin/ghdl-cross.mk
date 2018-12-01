@@ -7,8 +7,23 @@
 # > make all-ghdl_cross
 
 # The GCC version to use: Safest is to use same version as installed:
-GCC_VERSION = $(shell gcc --version | \
-	 sed -n 's/^gcc (.*) \([0-9]\.[0-9]\.[0-9]\).*/\1/p')
+
+CC = gcc
+
+# Mingw64 version to use
+MINGW64_VERSION = 6.0.0
+
+# ARCH = i586-mingw32msvc # SUPPORT DROPPED
+ARCH = i686-w64-mingw32
+# ARCH ?= x86_64-linux
+
+# include local configuration:
+include config.mk
+
+INSTALL_PREFIX ?= /usr
+
+GCC_VERSION ?= $(shell $(CC) --version | \
+	 sed -n 's/^$(CC) (.*) \([0-9]\.[0-9]\.[0-9]\).*/\1/p')
 
 # Some gcc version hacks:
 ifeq ($(GCC_VERSION),6.3.1)
@@ -26,16 +41,8 @@ GCC_TARFILE ?= gcc-$(GCC_VERSION).tar.xz
 endif
 endif
 
-# Mingw64 version to use
-MINGW64_VERSION = 6.0.0
+all: install-sandbox all-ghdl_cross
 
-# ARCH = i586-mingw32msvc
-ARCH = i686-w64-mingw32
-# ARCH ?= x86_64-linux
-
-
-# include local configuration:
-include config.mk
 # Prepare script
 include prepare.mk
 -include downloads.mk
@@ -70,6 +77,7 @@ CONF_FLAGS = --prefix=$(INSTALL_PREFIX) \
              --enable-checking \
              --disable-shared
 
+
 include gcc-ada.mk
 
 include binutils.mk
@@ -79,7 +87,7 @@ include crossconfig.mk
 include gcc-cross.mk
 include ghdl-cross.mk
 
-all: install-sandbox all-ghdl_cross
+-include debug.mk
 
 $(BUILD_ROOT)/cross-toolchain:
 	mkdir $@
