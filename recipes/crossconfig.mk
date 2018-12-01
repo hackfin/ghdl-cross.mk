@@ -9,15 +9,6 @@ CROSS_TOOLS = \
 CROSS_FLAGS = --target=$(ARCH)
 CROSS_FLAGS += --enable-sjlj-exceptions
 
-ifeq ($(ARCH),i586-mingw32msvc)
-	CROSS_FLAGS += --disable-win32-registry
-	ARCH_DEPS = install-runtime
-	# Hack to disable some functionality with missing declarations in legacy
-	# win32 api headers
-	GRT_EXTRA_CFLAGS = -DNO_FULL_WINAPI_SUPPORT
-	include mingw.mk
-endif
-
 MINGW_PREFIX ?= $(CROSS_SANDBOX)$(INSTALL_PREFIX)
 MINGW_CC     ?= $(MINGW_PREFIX)/bin/$(ARCH)-gcc
 
