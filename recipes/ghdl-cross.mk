@@ -2,26 +2,6 @@
 #
 #
 
-ifdef BUILD_FROM_SANDBOX
-
-TARGET_TOOLS = \
-	AS_FOR_TARGET=$(CROSS_SANDBOX)$(INSTALL_PREFIX)/bin/$(ARCH)-as \
-	AR_FOR_TARGET=$(CROSS_SANDBOX)$(INSTALL_PREFIX)/bin/$(ARCH)-ar \
-	NM_FOR_TARGET=$(CROSS_SANDBOX)$(INSTALL_PREFIX)/bin/$(ARCH)-nm \
-	LD_FOR_TARGET=$(CROSS_SANDBOX)$(INSTALL_PREFIX)/bin/$(ARCH)-ld
-
-	GHDL_CROSS_OPT = --with-build-sysroot=$(CROSS_SANDBOX)
-else
-
-TARGET_TOOLS = \
-	AS_FOR_TARGET=$(ARCH)-as \
-	AR_FOR_TARGET=$(ARCH)-ar \
-	NM_FOR_TARGET=$(ARCH)-nm \
-	LD_FOR_TARGET=$(ARCH)-ld
-
-	GHDL_CROSS_OPT = 
-endif
-
 GHDL_INSTALL_PREFIX = $(INSTALL_PREFIX)
 
 $(GHDL_CROSS_BUILD):
@@ -57,7 +37,7 @@ build-ghdl_cross: $(GHDL_CROSS_BUILD)/config.status $(GHDL_DEPENDENCIES)
 	$(MAKE) -C $(GHDL_CROSS_BUILD) \
 		$(CROSS_EXTRAFLAGS) \
 		all-gcc all-target
-	touch $@
+	$(call makestamp,$@,$<)
 
 install-ghdl_cross: build-ghdl_cross
 	$(USE_CROSS_SANDBOX_PATH) ; \
@@ -119,7 +99,7 @@ install-ghdllib_cross: build-ghdllib_cross
 clean-all-cross:
 	rm -fr $(CROSS_SANDBOX)/ghdl-cross build-ghdl_cross build-ghdllib_cross
 	rm -f $(GHDLLIB_CROSS_BUILDDIR)/Makefile
-	rm -f $(GHDL_CROSS_BUILD)/config.status
+	rm -f $(GHDL_CROSS_BUILD)
 
 
 DUTIES += build-ghdl_cross build-ghdllib_cross

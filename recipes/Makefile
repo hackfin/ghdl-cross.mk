@@ -11,15 +11,11 @@
 
 CC = gcc
 
-# Mingw64 version to use
-MINGW64_VERSION = 6.0.0
-
 # ARCH = i586-mingw32msvc # UNSUPPORTED
 ARCH = i686-w64-mingw32
 # ARCH ?= x86_64-linux
 
-# include local configuration:
-include config.mk
+include guess-config.mk
 
 INSTALL_PREFIX ?= /usr
 
@@ -85,6 +81,16 @@ CONF_FLAGS = --prefix=$(INSTALL_PREFIX) \
              --disable-shared
 
 
+define makestamp
+	@echo ------------------------------------------------------
+	@echo Build for rule $@  > $@
+	@echo install prefix: $(INSTALL_PREFIX) >> $@
+	for i in $(1); do \
+		eval val=$$i; \
+		echo $$i = $${val} ; \
+	done
+endef
+
 include gcc-ada.mk
 
 include binutils.mk
@@ -127,7 +133,7 @@ clean-stamps:
 clean: clean-stamps clean-targetlib clean-runtime
 
 # Run mrproper when changing the config, like GCC_VERSION, ...
-mrproper:
+mrproper: clean
 	rm -fr $(BUILD_ROOT)/cross-toolchain $(SANDBOX_ROOT)
 
 # Rules that don't parallelize:

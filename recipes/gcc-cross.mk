@@ -33,6 +33,7 @@ config-gcc: $(TEST_BUILD)/config.status
 build-gcc: $(TEST_BUILD)/config.status 
 	$(USE_NATIVE_SANDBOX_PATH); \
 	$(MAKE) -C $(TEST_BUILD) $(_MAKE_OPTIONS) \
+		$(TARGET_TOOLS) \
 		$(CROSS_EXTRAFLAGS) \
 		all-gcc all-target-libgcc
 	touch $@
@@ -69,6 +70,6 @@ clean-targetlib:
 # 3) Then build the gnattools
 
 
-all-gcc-mingw32: install-headers install-gcc install-runtime install-targetlib
+all-gcc-mingw32: install-headers install-gcc install-runtime install-target
 
 DUTIES += build-gcc build-targetlib install-target

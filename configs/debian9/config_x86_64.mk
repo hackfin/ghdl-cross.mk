@@ -15,23 +15,19 @@ VERSION = 0.003
 PREPARE_BUILD = export CPLUS_INCLUDE_PATH=/usr/include/x86_64-linux-gnu; \
 	export C_INCLUDE_PATH=/usr/include/x86_64-linux-gnu
 
-GCC_VERSION = 7.2.0
-
-
-# Root toolchain directory
-TOOLCHAIN_SRC = /data/src/gcc-toolchain
-# Set to directory where stuff should be built:
-BUILD_ROOT=/media/strubi/scratch/build
-
 # Define when we build GHDL with a cross compiler built in the sandbox:
-# BUILD_FROM_SANDBOX = y
+BUILD_FROM_SANDBOX = y
 
 # Installation prefix:
 ifdef BUILD_FROM_SANDBOX
+BUILD_INFO = 'Debian 9 x86-64 build, sandboxed cross compiler'
 INSTALL_PREFIX = /usr/local
+# Don't specify, take from installed
+# GCC_VERSION = 7.2.0
 # Choose any that compiles:
-MINGW64_VERSION = 5.0.4
+MINGW64_VERSION = 6.0.0
 else
+BUILD_INFO = 'Debian 9 x86-64 build, native cross compiler'
 INSTALL_PREFIX = /usr
 # Choose version closest to local installation:
 MINGW64_VERSION = 3.1.0
@@ -45,10 +41,7 @@ BINUTILS_SRC = $(TOOLCHAIN_SRC)/binutils-2.31
 # Source location of gcc:
 GCC_SRC = $(TOOLCHAIN_SRC)/gcc-$(GCC_VERSION)
 
-# Source location of ghdl original distribution:
-GHDL_SRC = /data/src/ghdl.latest
-
 # Mingw32 specifics:
 MINGW64_SRC = $(TOOLCHAIN_SRC)/mingw-w64-v$(MINGW64_VERSION)
 
-MINGW32_W64_INCLUDE = /usr/x86_64-w64-mingw32/include
+#MINGW32_W64_INCLUDE = /usr/x86_64-w64-mingw32/include

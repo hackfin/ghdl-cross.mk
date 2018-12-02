@@ -15,20 +15,19 @@ native Linux system that runs on another target, like
   
 ## Preparing the Docker container
 
-  1. Create the `recipes/config.mk` file (see also below)
-  2. Generate the distribution self extractable: `make -C recipes dist`
-  3. Build the container: `docker build -t ghdlcross .`
-  4. Start it: `docker run -it -w /home/build ghdlcross`
+  1. Generate the distribution self extractable: `make -C recipes dist`
+  2. Build the container: `docker build -t ghdlcross .`
+  3. Start it: `docker run -it -w /home/build ghdlcross`
 
-### Creating `config.mk`
+### Creating the configuration
 
-Before running the make process, you need to create a `config.mk` file from
-`config.mk.in` in `recipes/`, then edit the variables to point to the
-corresponding source directories, etc.
-When using the provided docker container, you'll only have to configure
-`TOOLCHAIN_SRC` (this is where the sources will be downloaded to) and
-`BUILD_ROOT` (the working and sandbox directory, preferrably on another
-hard disk).
+The `guess-config.mk` script is used to guess the right configuration
+from /etc/issue and the machine id. If your setup is not supported, you
+will have to create a config.mk and specify the TESTING=1 flag with make.
+
+When using the provided docker container, the local directory configuration
+will be taken from `docker_config.mk`, provided that the standard build
+user name is 'build'.
 
 ## Preparing the build
 

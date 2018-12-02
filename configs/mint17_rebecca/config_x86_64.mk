@@ -1,6 +1,5 @@
 # Local configuration make settings for ghdl-cross setup
 #
-# Copy this file to config.mk and insert necessary configuration
 
 # You have to edit the locations in this Makefile to make stuff compile.
 
@@ -9,34 +8,33 @@
 MAKE_OPTIONS = 
 
 # Define when we build GHDL with a cross compiler built in the sandbox:
-# When you change this, you must do a fresh build
-# BUILD_FROM_SANDBOX = y
+BUILD_FROM_SANDBOX = y
 
-# GCC version. When left empty, it is determined from the installed
-# compiler.
 
-# GCC_VERSION = 7.2.0
-
-# Mingw64 version to use
-MINGW64_VERSION = 3.1.0
-
-# Development version:
 
 VERSION = 0.003
 
-# Command to prepare the build.
 # Workaround for asm/errno.h error:
-# PREPARE_BUILD = export CPLUS_INCLUDE_PATH=/usr/include/x86_64-linux-gnu; \
+PREPARE_BUILD = export CPLUS_INCLUDE_PATH=/usr/include/x86_64-linux-gnu; \
 	export C_INCLUDE_PATH=/usr/include/x86_64-linux-gnu
 
-# Root toolchain directory
-TOOLCHAIN_SRC = 
 
-# Set to directory where stuff should be built:
-BUILD_ROOT =
 
-# Installation prefix:
+# Dont't touch these, unless you're sure what you're doing:
+ifdef BUILD_FROM_SANDBOX
+BUILD_INFO = 'Build for mint 17.1 (wonz), SANDBOXED compiler'
 INSTALL_PREFIX = /usr/local
+GCC_VERSION = 7.2.0
+# Choose any that compiles:
+MINGW64_VERSION = 3.1.0
+else
+BUILD_INFO = 'Build for mint 17.1 (wonz), native mingw-w64 toolchain'
+INSTALL_PREFIX = /usr
+# Choose version closest to local installation:
+MINGW64_VERSION = 3.1.0
+CC=gcc-7
+CXX=g++-7
+endif
 
 # Source location of binutils:
 BINUTILS_SRC = $(TOOLCHAIN_SRC)/binutils-2.31
@@ -45,8 +43,7 @@ BINUTILS_SRC = $(TOOLCHAIN_SRC)/binutils-2.31
 GCC_SRC = $(TOOLCHAIN_SRC)/gcc-$(GCC_VERSION)
 
 # Source location of ghdl original distribution:
-GHDL_SRC = $(TOOLCHAIN_SRC)/ghdl
 
-# MINGW-w64 source:
+# Mingw32 specifics:
 MINGW64_SRC = $(TOOLCHAIN_SRC)/mingw-w64-v$(MINGW64_VERSION)
 

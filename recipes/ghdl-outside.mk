@@ -110,6 +110,11 @@ install-ghdllib: $(GHDL_BUILDDIR)/Makefile
 		DESTDIR=$(INSTALL_ROOT)
 
 
+
 prepare-ghdl: $(VHDL_GCC)
 
 DUTIES += build-ghdl
+
+clean:
+	rm -f $(GHDL_BUILDDIR)/config.status $(DUTIES)
+

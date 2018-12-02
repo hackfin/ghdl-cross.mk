@@ -37,7 +37,7 @@ clean-headers:
 	rm -fr $(MINGW_HEADERS)
 
 clean-mingw64:
-	rm -fr $(MINGW_SANDBOX)
+	rm -fr $(MINGW_SANDBOX) install-mingw64
 
 install-runtime: install-mingw64
 
