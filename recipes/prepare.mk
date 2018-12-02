@@ -30,6 +30,6 @@ $(VHDL_GCC): $(GHDL_BUILDDIR)/config.status
 
 prepare-ghdl: $(VHDL_GCC)
 
-prepare: prepare-ghdl
+prepare: prepare-ghdl $(CROSS_BUILD)
 
 .PHONY: prepare prepare-ghdl

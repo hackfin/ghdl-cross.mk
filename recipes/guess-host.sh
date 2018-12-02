@@ -10,6 +10,9 @@ case "$HOST_ISSUE" in
 	Debian\ GNU/Linux\ 9*)
 		OS=debian9
 	;;
+	Debian\ GNU/Linux\ buster*)
+		OS=debian_buster
+	;;
 	Linux\ Mint\ 17.1*)
 		OS=mint17_rebecca
 	;;

@@ -141,8 +141,8 @@ mrproper: clean
 .NOTPARALLEL: build-gcc
 
 dist:
-	cd ..; tar cfvz ghdl-build.mk.tgz recipes \
-		--exclude=.git --exclude=*.swp \
+	cd ..; tar cfvz ghdl-build.mk.tgz recipes configs \
+		--exclude=.git --exclude=*.swp docker_config.mk \
 		--exclude=*.swo \
 		--exclude=build-* --exclude=install-*
 	cat ../self-extract.sh ../ghdl-build.mk.tgz >../ghdlbuild_sfx.sh

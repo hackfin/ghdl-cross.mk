@@ -87,6 +87,7 @@ GHDLLIB_OPTIONS = \
 
 # Build ghdl library with the prefix of the installed GHDL:
 build-ghdllib_cross: $(GHDLLIB_CROSS_BUILDDIR)/Makefile
+	$(USE_CROSS_SANDBOX_PATH); \
 	$(MAKE) -C $(dir $<) ghdllib \
 		$(GHDLLIB_OPTIONS)
 	touch $@
