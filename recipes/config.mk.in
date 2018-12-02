@@ -8,6 +8,11 @@
 
 MAKE_OPTIONS = 
 
+# GCC version
+GCC_VERSION = 7.2.0
+# Mingw64 version to use
+MINGW64_VERSION = 3.1.0
+
 # Development version:
 
 VERSION = 0.003
@@ -24,6 +29,7 @@ TOOLCHAIN_SRC =
 BUILD_ROOT =
 
 # Define when we build GHDL with a cross compiler built in the sandbox:
+# When you change this, you must do a fresh build
 # BUILD_FROM_SANDBOX = y
 
 # Installation prefix:
@@ -38,17 +44,9 @@ GCC_SRC = $(TOOLCHAIN_SRC)/gcc-$(GCC_VERSION)
 # Source location of ghdl original distribution:
 GHDL_SRC = $(TOOLCHAIN_SRC)/ghdl
 
-# Include optional download rules file
--include downloads.mk
--include prepare.mk
-
-# Mingw32 specifics:
-# Unused mingw32 runtime
-# MINGW_RT_SRC = $(TOOLCHAIN_SRC)/mingwrt-5.0.2
-# WIN32API_SRC = $(TOOLCHAIN_SRC)/w32api-5.0.2
 
 # MINGW-w64 source:
-MINGW64_SRC = $(TOOLCHAIN_SRC)/mingw-w64-v3.1.0
+MINGW64_SRC = $(TOOLCHAIN_SRC)/mingw-w64-v$(MINGW64_VERSION)
 
 # Unused:
 # MINGW_RT_ARCHIVE = /media/scratch/Downloads/mingwrt-3.20-2-mingw32-src.tar.lzma

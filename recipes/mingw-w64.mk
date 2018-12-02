@@ -41,6 +41,8 @@ clean-mingw64:
 
 install-runtime: install-mingw64
 
+clean-runtime: clean-headers clean-mingw64
+
 $(CROSS_SANDBOX)/mingw:
 	ln -s $(CROSS_SANDBOX)/$(INSTALL_PREFIX)/$(ARCH) $@
 

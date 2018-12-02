@@ -36,7 +36,7 @@ $(GHDL_CROSS_BUILD)/config.status: $(VHDL_GCC) | $(GHDL_CROSS_BUILD)
 	cd $(dir $@) && \
 	$(USE_CROSS_SANDBOX_PATH); \
 	$(TARGET_TOOLS) \
-	$(TARGET_GHDL_CFLAGS) \
+	$(TARGET_GHDL_OPTIONS) \
 	$(GCC_SRC)/configure \
  		$(GHDL_CROSS_OPT) \
  		--prefix=$(GHDL_INSTALL_PREFIX) \
@@ -55,11 +55,11 @@ $(GHDL_CROSS_BUILD)/config.status: $(VHDL_GCC) | $(GHDL_CROSS_BUILD)
 build-ghdl_cross: $(GHDL_CROSS_BUILD)/config.status $(GHDL_DEPENDENCIES)
 	$(USE_CROSS_SANDBOX_PATH) ; \
 	$(MAKE) -C $(GHDL_CROSS_BUILD) \
-		CFLAGS_FOR_TARGET="$(GHDL_EXTRA_FLAGS)" \
 		$(CROSS_EXTRAFLAGS) \
 		all-gcc all-target
+	touch $@
 
-install-ghdl_cross:
+install-ghdl_cross: build-ghdl_cross
 	$(USE_CROSS_SANDBOX_PATH) ; \
 	$(MAKE) -C $(GHDL_CROSS_BUILD) install-gcc install-target \
 		DESTDIR=$(CROSS_SANDBOX)/ghdl-cross
@@ -78,11 +78,14 @@ $(GHDLLIB_CROSS_BUILDDIR):
 
 $(GHDL_SRC)/configure: | $(GHDL_SRC)
 
+GHDLLIB_TOOLS = \
+	GNATMAKE=$(CROSS_PREFIX)-gnatmake \
+	AS=$(CROSS_PREFIX)-as \
+	CC=$(CROSS_PREFIX)-gcc
+
 $(GHDLLIB_CROSS_BUILDDIR)/Makefile: $(GHDL_SRC)/configure | $(GHDLLIB_CROSS_BUILDDIR) 
 	cd $(dir $@) && $< \
-		GNATMAKE=$(CROSS_PREFIX)-gnatmake \
-		AS=$(CROSS_PREFIX)-as \
-		CC=$(CROSS_PREFIX)-gcc \
+		$(GHDLLIB_TOOLS) \
 		--with-gcc=$(GCC_SRC) --prefix=$(INSTALL_PREFIX)
 
 GRT_CFLAGS = -I$(GCC_SRC)/zlib
@@ -114,34 +117,10 @@ install-ghdllib_cross: build-ghdllib_cross
 		DESTDIR=$(CROSS_SANDBOX)/ghdl-cross
 
 clean-all-cross:
-	rm -fr $(CROSS_SANDBOX)/ghdl-cross build-gcc build-ghdllib_cross
+	rm -fr $(CROSS_SANDBOX)/ghdl-cross build-ghdl_cross build-ghdllib_cross
 	rm -f $(GHDLLIB_CROSS_BUILDDIR)/Makefile
 	rm -f $(GHDL_CROSS_BUILD)/config.status
 
-############################################################################
-# Test configuration:
-	
-/tmp/test/config.status:
-	cd $(dir $@) && \
- 	$(USE_NATIVE_SANDBOX_PATH); \
- 	$(TARGET_TOOLS) \
-	CFLAGS=-O2 \
-	$(GCC_SRC)/configure \
- 		--with-build-sysroot=$(CROSS_SANDBOX) \
- 		--prefix=$(INSTALL_PREFIX) \
- 		--enable-languages=c,vhdl \
- 		--enable-checking \
- 		--enable-libbacktrace \
- 		--disable-bootstrap \
- 		--disable-libssp \
- 		--disable-libquadmath \
- 		--disable-multilib \
- 		--with-gnu-ld --with-gnu-as \
-		--target=$(ARCH)
 
-testconfig: /tmp/test/config.status
-
-.PHONY: /tmp/test/config.status
-
-DUTIES += build-ghdllib_cross
+DUTIES += build-ghdl_cross build-ghdllib_cross
 

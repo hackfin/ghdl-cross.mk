@@ -1,19 +1,20 @@
-
-# Install base GCC with libraries:
+#
+# Build and install base GCC with libraries (wait some time...)
+#
 # > make install-sandbox
 #
 # Install GHDL and libraries (do not use -j option):
 #
 # > make all-ghdl_cross
 
-# The GCC version to use: Safest is to use same version as installed:
+# The GCC version to use: see config.mk(.in)
 
 CC = gcc
 
 # Mingw64 version to use
 MINGW64_VERSION = 6.0.0
 
-# ARCH = i586-mingw32msvc # SUPPORT DROPPED
+# ARCH = i586-mingw32msvc # UNSUPPORTED
 ARCH = i686-w64-mingw32
 # ARCH ?= x86_64-linux
 
@@ -41,7 +42,13 @@ GCC_TARFILE ?= gcc-$(GCC_VERSION).tar.xz
 endif
 endif
 
-all: install-sandbox all-ghdl_cross
+ifdef BUILD_FROM_SANDBOX
+TASKS = install-sandbox
+endif
+
+TASKS += all-ghdl_cross
+
+all: $(TASKS)
 
 # Prepare script
 include prepare.mk
@@ -104,7 +111,7 @@ install-bootstrap: install-gcc-ada
 install-sandbox: install-binutils install-headers install-gcc \
 	install-target install-libz 
 
-all-ghdl_cross: build-ghdl_cross install-ghdl_cross install-ghdllib_cross \
+all-ghdl_cross: install-ghdl_cross install-ghdllib_cross \
 	install-libbacktrace
 
 .NOTPARALLEL: all install-sandbox all-ghdl_cross
@@ -116,6 +123,8 @@ check:
 
 clean-stamps:
 	-rm $(DUTIES)
+
+clean: clean-stamps clean-targetlib clean-runtime
 
 # Run mrproper when changing the config, like GCC_VERSION, ...
 mrproper:

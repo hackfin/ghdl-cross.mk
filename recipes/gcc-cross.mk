@@ -57,6 +57,7 @@ install-target: build-gcc build-targetlib
 	$(MAKE) -C $(TEST_BUILD) $(_MAKE_OPTIONS) \
 		$(CROSS_EXTRAFLAGS) \
 		install-gcc install-target-libgcc
+	touch $@
 
 clean-targetlib:
 	rm -f $(TEST_BUILD)/config.status
@@ -70,4 +71,4 @@ clean-targetlib:
 
 all-gcc-mingw32: install-headers install-gcc install-runtime install-targetlib
 
-DUTIES += build-gcc build-targetlib
+DUTIES += build-gcc build-targetlib install-target
