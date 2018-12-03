@@ -11,8 +11,6 @@ RUN useradd -u 1000 -g 100 -m -s /bin/bash build && \
     mkdir /home/build/scripts && \
     echo "export PATH=$PATH:/opt/gnat/bin" >> /home/build/.bashrc
 
-COPY ghdlbuild_sfx.sh /home/build/scripts/
-
 RUN chown -R build /home/build
 USER build
 

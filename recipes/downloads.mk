@@ -42,9 +42,9 @@ $(GHDL_SRC):
 
 download-gcc: $(UNIFIED_BUILDLIBS)
 
-download-binutils: $(BINUTILS_SRC)
+download-binutils: | $(BINUTILS_SRC)
 
-download-runtime: $(MINGW64_SRC)
+download-runtime: | $(MINGW64_SRC)
 
 download-all: download-gcc download-binutils download-runtime | $(GHDL_SRC)
 

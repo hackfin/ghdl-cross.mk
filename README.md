@@ -18,6 +18,13 @@ native Linux system that runs on another target, like
   1. Generate the distribution self extractable: `make -C recipes dist`
   2. Build the container: `docker build -t ghdlcross .`
   3. Start it: `docker run -it -w /home/build ghdlcross`
+  4. Copy `ghdlbuild_sfx.sh` to /home/build/scripts in the docker container
+     or copy & paste into the docker shell:
+     `wget section5.ch/downloads/ghdlbuild_sfx.sh && sh ghdlbuild_sfx.sh`
+
+  New: You can also pull the docker container from Docker hub:
+
+      docker pull hackfin/ghdl-cross-mingw32
 
 ### Creating the configuration
 
@@ -34,12 +41,6 @@ user name is 'build'.
 New behaviour: Since local installations make life very difficult for
 proper reproduction, a Dockerfile is supplied for a reference building
 environment.
-
-Inside the container, enter the `scripts` directory and extract the build
-scripts by
-```sh
-$ sh ghdlbuild_sfx.sh
-```
 
 The `GCC_VERSION` variable is generated from the locally installed GCC.
 
