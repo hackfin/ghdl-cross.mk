@@ -1,10 +1,11 @@
+# Setup for non-sandbox build (docker hub)
 FROM reznik/gnat:gpl.2017.slim 
-# Alternative:
-# FROM ghdl/ghdl:buster-gcc-7.2.0 
+# See sandbox config in 
+# Dockerfile.gcc-7.2.0 
 
 RUN apt-get update; apt-get install -y \
-	make git wget libz-dev texinfo xz-utils bzip2 file
-
+	make git wget libz-dev texinfo xz-utils bzip2 file \
+	gnat-mingw-w64 g++
 
 RUN useradd -u 1000 -g 100 -m -s /bin/bash build && \
     mkdir /home/build/src  && \

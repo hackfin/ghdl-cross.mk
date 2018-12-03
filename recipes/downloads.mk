@@ -46,7 +46,13 @@ download-binutils: | $(BINUTILS_SRC)
 
 download-runtime: | $(MINGW64_SRC)
 
-download-all: download-gcc download-binutils download-runtime | $(GHDL_SRC)
+DOWNLOAD_DUTIES = download-gcc 
+
+ifdef BUILD_FROM_SANDBOX
+	DOWNLOAD_DUTIES += download-binutils download-runtime
+endif
+
+download-all: $(DOWNLOAD_DUTIES) | $(GHDL_SRC)
 
 
 .PHONY: download-all download-binutils download-gcc download-runtime

@@ -4,7 +4,8 @@
 
 GHDL_INSTALL_PREFIX = $(INSTALL_PREFIX)
 
-$(GHDL_CROSS_BUILD):
+
+$(GHDL_CROSS_BUILD): | $(CROSS_BUILD)
 	mkdir $@
 
 # Fails with:

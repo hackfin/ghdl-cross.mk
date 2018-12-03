@@ -16,7 +16,7 @@ PREPARE_BUILD = export CPLUS_INCLUDE_PATH=/usr/include/x86_64-linux-gnu; \
 	export C_INCLUDE_PATH=/usr/include/x86_64-linux-gnu
 
 # Define when we build GHDL with a cross compiler built in the sandbox:
-BUILD_FROM_SANDBOX = y
+# BUILD_FROM_SANDBOX = y
 
 # Installation prefix:
 ifdef BUILD_FROM_SANDBOX
@@ -31,8 +31,8 @@ BUILD_INFO = 'Debian 9 x86-64 build, native cross compiler'
 INSTALL_PREFIX = /usr
 # Choose version closest to local installation:
 MINGW64_VERSION = 3.1.0
-CC=gcc-7
-CXX=g++-7
+# CC=gcc-7
+# CXX=g++-7
 endif
 
 # Source location of binutils:
