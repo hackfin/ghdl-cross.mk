@@ -50,27 +50,6 @@ mingw32-ghdl-libs: install-mingw32-stamp
 	dh_md5sums -p$@
 	dh_builddeb -p$@
 
-mingw32-binutils: install-mingw32-stamp
-	dh_install -p$@
-	dh_strip -Xlib -p$@
-	dh_makeshlibs -p$@
-	dh_installdeb -p$@
-	dh_shlibdeps -p$@
-	dh_gencontrol -p$@ -- -v4.8.2
-	dh_md5sums -p$@
-	dh_builddeb -p$@
-
-mingw32-gcc: install-mingw32-stamp
-	dh_install -p$@
-	dh_strip -Xlib -p$@
-	dh_makeshlibs -p$@
-	dh_installdeb -p$@
-	dh_shlibdeps -p$@
-	dh_gencontrol -p$@ -- -v4.8.2
-	dh_md5sums -p$@
-	dh_builddeb -p$@
-
-
 mingw32-ghdl: install-mingw32-stamp
 	dh_install -p$@
 	dh_strip -Xlib -p$@
@@ -88,9 +67,6 @@ clean:
 	-rm install-ghdl-stamp
 
 binary: mingw32-ghdl mingw32-ghdl-libs
-# binary: mingw32-binutils mingw32-gcc mingw32-ghdl
 
 .PHONY: binary clean mingw32-ghdl
 
-# override_dh_strip:
-# 	dh_strip -Xlib
