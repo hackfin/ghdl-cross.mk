@@ -1,0 +1,7 @@
+ghdl (0.36dev-1) unstable; urgency=low
+
+  * This is an unstable build of a recent checkout of the
+    ghdl v3.6 development tree at
+      https://github.com/ghdl/ghdl/
+
+ -- Martin Strubel <hackfin@section5.ch>  Tue, 11 Dec 2018 17:38:09 +0100

@@ -1,0 +1,96 @@
+#!/usr/bin/make -f
+# -*- makefile -*-
+# Sample debian/rules that uses debhelper.
+# This file was originally written by Joey Hess and Craig Small.
+# As a special exception, when this file is copied by dh-make into a
+# dh-make output file, you may use that output file without restriction.
+# This special exception was added by Craig Small in version 0.37 of dh-make.
+
+# Uncomment this to turn on verbose mode.
+# export DH_VERBOSE=1
+
+%:
+	dh  $@
+
+install-ghdl-stamp:
+	$(MAKE) install DESTDIR=$(CURDIR)/debian/tmp
+	touch $@
+
+install-mingw32-stamp:
+	$(MAKE) install-cross DESTDIR=$(CURDIR)/debian/tmp
+	touch $@
+
+ghdl: install-ghdl-stamp
+	dh_install -p$@
+	dh_strip -Xlib -p$@
+	dh_makeshlibs -p$@
+	dh_installdeb -p$@
+	dh_shlibdeps -p$@
+	dh_gencontrol -p$@
+	dh_md5sums -p$@
+	dh_builddeb -p$@
+
+ghdl-libs: install-ghdl-stamp
+	dh_install -p$@
+	dh_strip -Xlib -p$@
+	dh_makeshlibs -p$@
+	dh_installdeb -p$@
+	dh_shlibdeps -p$@
+	dh_gencontrol -p$@
+	dh_md5sums -p$@
+	dh_builddeb -p$@
+
+mingw32-ghdl-libs: install-mingw32-stamp
+	dh_install -p$@
+	dh_strip -Xlib -p$@
+	dh_makeshlibs -p$@
+	dh_installdeb -p$@
+	dh_shlibdeps -p$@
+	dh_gencontrol -p$@
+	dh_md5sums -p$@
+	dh_builddeb -p$@
+
+mingw32-binutils: install-mingw32-stamp
+	dh_install -p$@
+	dh_strip -Xlib -p$@
+	dh_makeshlibs -p$@
+	dh_installdeb -p$@
+	dh_shlibdeps -p$@
+	dh_gencontrol -p$@ -- -v4.8.2
+	dh_md5sums -p$@
+	dh_builddeb -p$@
+
+mingw32-gcc: install-mingw32-stamp
+	dh_install -p$@
+	dh_strip -Xlib -p$@
+	dh_makeshlibs -p$@
+	dh_installdeb -p$@
+	dh_shlibdeps -p$@
+	dh_gencontrol -p$@ -- -v4.8.2
+	dh_md5sums -p$@
+	dh_builddeb -p$@
+
+
+mingw32-ghdl: install-mingw32-stamp
+	dh_install -p$@
+	dh_strip -Xlib -p$@
+	dh_makeshlibs -p$@
+	dh_installdeb -p$@
+	dh_shlibdeps -p$@
+	dh_gencontrol -p$@
+	dh_md5sums -p$@
+	dh_builddeb -p$@
+
+
+clean:
+	dh_clean
+	-rm install-mingw32-stamp
+	-rm install-ghdl-stamp
+
+binary: mingw32-ghdl mingw32-ghdl-libs
+# binary: mingw32-binutils mingw32-gcc mingw32-ghdl
+
+.PHONY: binary clean mingw32-ghdl
+
+# override_dh_strip:
+# 	dh_strip -Xlib

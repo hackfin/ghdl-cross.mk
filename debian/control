@@ -1,0 +1,37 @@
+Source: ghdl
+Section: devel
+Priority: extra
+Maintainer: Martin Strubel <hackfin@section5.ch>
+Build-Depends: debhelper (>= 7)
+Standards-Version: 3.8.3
+Homepage: http://ghdl.free.fr/
+
+Package: ghdl-libs
+Architecture: amd64
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: GHDL library
+ GHDL is a VHDL compiler and simulator. More you find on the GHDL homepage.
+ This is the package including IEEE and vendor libraries coming with GHDL.
+
+Package: mingw32-ghdl-libs
+Architecture: amd64
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: GHDL library
+ GHDL is a VHDL compiler and simulator. More you find on the GHDL homepage.
+ This is the package including IEEE and vendor libraries for the mingw32
+ GHDL cross-compiler.
+ 
+Package: ghdl
+Architecture: amd64
+Depends: ${shlibs:Depends}, ${misc:Depends} ghdl-libs
+Description: GHDL experimental release
+ GHDL is a VHDL compiler and simulator. More you find on the GHDL homepage.
+ For this experimental release, you might want to check the GHDL mailing
+ list, also listed on the above home page.
+
+Package: mingw32-ghdl
+Architecture: amd64
+Depends: ${shlibs:Depends}, ${misc:Depends} ghdl-libs
+Description: GHDL mingw32 cross compiler experimental release
+ This variant of GHDL creates Windows 32 bit executables, unlike the mcode
+ win32 version. Warning: Experimental.

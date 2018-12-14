@@ -4,6 +4,7 @@
 
 GHDL_INSTALL_PREFIX = $(INSTALL_PREFIX)
 
+DESTDIR ?= $(CROSS_SANDBOX)/ghdl-cross
 
 $(GHDL_CROSS_BUILD): | $(CROSS_BUILD)
 	mkdir $@
@@ -43,14 +44,14 @@ build-ghdl_cross: $(GHDL_CROSS_BUILD)/config.status $(GHDL_DEPENDENCIES)
 install-ghdl_cross: build-ghdl_cross
 	$(USE_CROSS_SANDBOX_PATH) ; \
 	$(MAKE) -C $(GHDL_CROSS_BUILD) install-gcc install-target \
-		DESTDIR=$(CROSS_SANDBOX)/ghdl-cross
+		DESTDIR=$(DESTDIR)
 
 ############################################################################
 
 LIBBACKTRACE = libbacktrace/.libs/libbacktrace.a
 
 install-libbacktrace: $(GHDL_CROSS_BUILD)/$(ARCH)/$(LIBBACKTRACE)
-	cp $< $(CROSS_SANDBOX)/ghdl-cross$(INSTALL_PREFIX)/lib/ghdl
+	cp $< $(DESTDIR)$(INSTALL_PREFIX)/$(ARCH)/lib/ghdl
 
 GHDLLIB_CROSS_BUILDDIR = $(GHDL_CROSS_BUILD)/ghdllib
 
@@ -67,7 +68,7 @@ GHDLLIB_TOOLS = \
 $(GHDLLIB_CROSS_BUILDDIR)/Makefile: $(GHDL_SRC)/configure | $(GHDLLIB_CROSS_BUILDDIR) 
 	cd $(dir $@) && $< \
 		$(GHDLLIB_TOOLS) \
-		--with-gcc=$(GCC_SRC) --prefix=$(INSTALL_PREFIX)
+		--with-gcc=$(GCC_SRC) --prefix=$(INSTALL_PREFIX)/$(ARCH)
 
 GRT_CFLAGS = -I$(GCC_SRC)/zlib
 
@@ -96,12 +97,12 @@ build-ghdllib_cross: $(GHDLLIB_CROSS_BUILDDIR)/Makefile
 install-ghdllib_cross: build-ghdllib_cross
 	$(MAKE) -C $(GHDLLIB_CROSS_BUILDDIR) install \
 		$(GHDLLIB_OPTIONS) \
-		DESTDIR=$(CROSS_SANDBOX)/ghdl-cross
+		DESTDIR=$(DESTDIR)
 
 clean-all-cross:
 	rm -fr $(CROSS_SANDBOX)/ghdl-cross build-ghdl_cross build-ghdllib_cross
 	rm -f $(GHDLLIB_CROSS_BUILDDIR)/Makefile
-	rm -f $(GHDL_CROSS_BUILD)
+	rm -fr $(GHDL_CROSS_BUILD)
 
 
 DUTIES += build-ghdl_cross build-ghdllib_cross

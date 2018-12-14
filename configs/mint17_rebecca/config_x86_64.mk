@@ -8,7 +8,7 @@
 MAKE_OPTIONS = 
 
 # Define when we build GHDL with a cross compiler built in the sandbox:
-BUILD_FROM_SANDBOX = y
+# BUILD_FROM_SANDBOX = y
 
 
 
@@ -30,6 +30,7 @@ MINGW64_VERSION = 3.1.0
 else
 BUILD_INFO = 'Build for mint 17.1 (wonz), native mingw-w64 toolchain'
 INSTALL_PREFIX = /usr
+GCC_VERSION = 7.2.0
 # Choose version closest to local installation:
 MINGW64_VERSION = 3.1.0
 CC=gcc-7

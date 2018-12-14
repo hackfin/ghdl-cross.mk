@@ -5,7 +5,7 @@ INSTALL_ROOT = /media/sandbox
 
 INSTALL_PREFIX = /usr
 
-all: install-ghdl install-ghdllib
+install: install-ghdl install-ghdllib
 
 include recipes/ghdl-outside.mk
 
