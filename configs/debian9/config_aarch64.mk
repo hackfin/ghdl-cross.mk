@@ -15,6 +15,8 @@ REQUIRED_PACKAGES = gnat-mingw-w64
 
 VERSION = 0.003
 
+# Don't build from sandbox, but make sure REQUIRED_PACKAGES are installed
+# BUILD_FROM_SANDBOX = y
 CC = gcc-7
 CXX = g++-7
 
@@ -25,12 +27,10 @@ GCC_VERSION = 7.2.0
 
 PREPARE_BUILD = true
 
-# Don't build from sandbox, but make sure REQUIRED_PACKAGES are installed
-# BUILD_FROM_SANDBOX = y
 
 MINGW64_VERSION = 6.0.0
 
-INSTALL_PREFIX = /usr/local
+INSTALL_PREFIX = /usr
 
 # Source location of binutils:
 BINUTILS_SRC = $(TOOLCHAIN_SRC)/binutils-2.31

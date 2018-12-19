@@ -91,8 +91,6 @@ define makestamp
 	done
 endef
 
-include gcc-ada.mk
-
 include binutils.mk
 
 include crossconfig.mk
