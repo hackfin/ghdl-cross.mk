@@ -20,6 +20,9 @@ INSTALL_PREFIX ?= /usr
 # Build (scratch) path: Needs quite some storage space.
 BUILD_ROOT ?= /tmp/ghdl_build
 
+# Enable when building with synthesis:
+GHDL_SYNTH_OPTIONS = --enable-libghdl --enable-synth
+
 # Define when building from outside a specific sandbox
 USE_NATIVE_SANDBOX_PATH ?= true
 
@@ -51,6 +54,7 @@ $(GHDL_BUILDDIR):
 $(GHDL_BUILDDIR)/config.status: $(GHDL_SRC)/configure | $(GHDL_BUILDDIR)
 	[ -e $(dir $@) ] || mkdir $(dir $@)
 	cd $(dir $@) && $< \
+		$(GHDL_SYNTH_OPTIONS) \
 		--with-gcc=$(GCC_SRC) \
 		--prefix=$(INSTALL_PREFIX)
 

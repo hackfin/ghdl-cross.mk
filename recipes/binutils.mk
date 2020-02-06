@@ -4,6 +4,7 @@ $(CROSS_BUILD)/binutils/config.status: $(BINUTILS_SRC)/configure | $(CROSS_BUILD
 	[ -e $(CROSS_BUILD)/binutils ] || mkdir $(CROSS_BUILD)/binutils
 	cd $(CROSS_BUILD)/binutils; \
 	$< $(CONF_FLAGS) \
+		--prefix=$(INSTALL_PREFIX) \
 		--target=$(ARCH)
 
 build-binutils: $(CROSS_BUILD)/binutils/config.status

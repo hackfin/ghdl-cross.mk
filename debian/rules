@@ -66,7 +66,7 @@ clean:
 	-rm install-mingw32-stamp
 	-rm install-ghdl-stamp
 
-binary: mingw32-ghdl mingw32-ghdl-libs
+binary: $(CROSS_PREFIX)ghdl $(CROSS_PREFIX)ghdl-libs
 
 .PHONY: binary clean mingw32-ghdl
 
