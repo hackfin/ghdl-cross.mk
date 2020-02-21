@@ -2,6 +2,8 @@
 #
 # Requires a number of configuration variables:
 #
+#
+
 # Version of GCC:
 GCC_VERSION ?= 7.2.0
 #
@@ -21,7 +23,7 @@ INSTALL_PREFIX ?= /usr
 BUILD_ROOT ?= /tmp/ghdl_build
 
 # Enable when building with synthesis:
-GHDL_SYNTH_OPTIONS = --enable-libghdl --enable-synth
+GHDL_SYNTH_OPTIONS = --enable-libghdl --enable-synth --default-pic
 
 # Define when building from outside a specific sandbox
 USE_NATIVE_SANDBOX_PATH ?= true
@@ -32,12 +34,13 @@ MACHINE = $(shell uname -m)
 # > raised TYPES.UNRECOVERABLE_ERROR : comperr.adb:406
 # or similar, when forgotten:
 ifeq ($(MACHINE),aarch64)
-	EXTRA_FLAGS = CFLAGS=-fPIC
 	PLATFORM=-unknown-linux-gnu
 endif
 ifeq ($(MACHINE),x86_64)
 	PLATFORM=-pc-linux-gnu
 endif
+
+# EXTRA_FLAGS = CFLAGS=-fPIC
 
 ARCH=$(MACHINE)$(PLATFORM)
 
@@ -113,9 +116,11 @@ install-ghdllib: $(GHDL_BUILDDIR)/Makefile
 		GHDL1_GCC_BIN=--GHDL1=$(INSTALL_ROOT)$(INSTALL_PREFIX)/libexec/gcc/$(ARCH)/$(GCC_VERSION)/ghdl1 \
 		DESTDIR=$(INSTALL_ROOT)
 
-
-
 prepare-ghdl: $(VHDL_GCC)
+
+debug:
+	@echo VHDL_GCC = $(VHDL_GCC)
+	@echo GHDL_BUILDDIR = $(GHDL_BUILDDIR)
 
 DUTIES += build-ghdl
 

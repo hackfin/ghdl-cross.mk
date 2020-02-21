@@ -52,6 +52,7 @@ Tested versions:
 | ----------- | --------------------------------------------- | --------- |
 | 6.3.0       | (Dockerfile, default)                         | PASS      |
 | 7.2.0       | (Dockerfile.gcc-7.2.0)                        | PASS      |
+| 8.3.0       | (Dockerfile, `debian_buster`)                 | PASS      |
 | 7.3.0       | (Docker container: reznik/gnat:gpl.2018.slim) | FAIL      |
 
 It is no longer necessary to download the sources manually.
@@ -112,6 +113,20 @@ the /lib/cpp sanity check complaint.
 
 ```sh
 $ make all-ghdl_cross
+```
+
+### Building ghdl for native host:
+
+Of course you can also simply build for the native host architecture.
+
+```sh
+$ make install
+```
+
+or build a debian package:
+
+```sh
+$ make deb
 ```
 
 ### Cleaning up

@@ -33,8 +33,12 @@ else
 ifeq ($(GCC_VERSION),7.2.0)
 GCC_TARFILE = gcc-$(GCC_VERSION).tar.xz
 else
+ifeq ($(GCC_VERSION),8.3.0)
+GCC_TARFILE = gcc-$(GCC_VERSION).tar.xz
+else
 $(warning "Unsupported GCC version $(GCC_VERSION)")
 GCC_TARFILE ?= gcc-$(GCC_VERSION).tar.xz
+endif
 endif
 endif
 

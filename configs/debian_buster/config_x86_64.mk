@@ -11,6 +11,8 @@ MAKE_OPTIONS =
 
 VERSION = 0.003
 
+GCC_VERSION = 8.3.0
+
 # Workaround for asm/errno.h error:
 PREPARE_BUILD = export CPLUS_INCLUDE_PATH=/usr/include/x86_64-linux-gnu; \
 	export C_INCLUDE_PATH=/usr/include/x86_64-linux-gnu
