@@ -70,6 +70,7 @@ $(GHDL_GCC_BUILDDIR)/config.status: $(GCC_SRC)/configure | $(GHDL_GCC_BUILDDIR)
 	cd $(dir $@) && $< \
 		--prefix=$(INSTALL_PREFIX) \
 		--enable-languages=c,vhdl \
+		--enable-default-pie \
 		--disable-bootstrap \
 		--disable-multilib \
 		--disable-lto \
