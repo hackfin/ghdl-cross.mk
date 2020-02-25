@@ -22,7 +22,7 @@ BUILD_FROM_SANDBOX = y
 
 # Installation prefix:
 BUILD_INFO = 'Debian buster x86-64 build, sandboxed cross compiler'
-INSTALL_PREFIX = /usr/local
+INSTALL_PREFIX ?= /usr/local
 # Choose any that compiles:
 MINGW64_VERSION = 6.0.0
 

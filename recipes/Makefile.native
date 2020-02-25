@@ -2,9 +2,12 @@ include ../config.mk
 
 INSTALL_ROOT = /media/sandbox
 
+# When changing this, you need to run 'mrproper'
 INSTALL_PREFIX = /usr
 
-install: install-ghdl install-ghdllib
+.NOTPARALLEL: install
+
+install: prepare-ghdl install-ghdl install-ghdllib
 
 include guess-config.mk
 include ghdl-outside.mk

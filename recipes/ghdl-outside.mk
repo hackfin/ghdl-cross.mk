@@ -45,7 +45,7 @@ endif
 ARCH=$(MACHINE)$(PLATFORM)
 
 
-GHDL_GCC_BUILDDIR = $(BUILD_ROOT)/ghdl-native
+GHDL_GCC_BUILDDIR = $(BUILD_ROOT)/ghdl-native-$(GCC_VERSION)
 
 GHDL_BUILDDIR ?= $(BUILD_ROOT)/ghdl
 
@@ -121,9 +121,11 @@ prepare-ghdl: $(VHDL_GCC)
 debug:
 	@echo VHDL_GCC = $(VHDL_GCC)
 	@echo GHDL_BUILDDIR = $(GHDL_BUILDDIR)
+	@echo INSTALL_PREFIX = $(INSTALL_PREFIX)
 
 DUTIES += build-ghdl
 
 clean:
 	rm -f $(GHDL_BUILDDIR)/config.status $(DUTIES)
+	rm -fr $(VHDL_GCC)
 

@@ -1,6 +1,14 @@
-ghdl (0.37synth-1) unstable; urgency=low
+ghdl (0.37synth-2) unstable; urgency=low
+  This is an unstable build of a recent checkout of the
+    ghdl 0.37 development tree with synthesis at
+      https://github.com/ghdl/ghdl/
 
-  * This is an unstable build of a recent checkout of the
+   Fixes: #1140
+
+ -- Martin Strubel <hackfin@section5.ch>  Tue, 25 Feb 2020 10:26:46 +0100
+
+ghdl (0.37synth-1) unstable; urgency=low
+  This is an unstable build of a recent checkout of the
     ghdl 0.37 development tree with synthesis at
       https://github.com/ghdl/ghdl/
 
