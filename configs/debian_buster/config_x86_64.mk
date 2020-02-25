@@ -32,5 +32,7 @@ BINUTILS_SRC = $(TOOLCHAIN_SRC)/binutils-2.31
 # Source location of gcc:
 GCC_SRC = $(TOOLCHAIN_SRC)/gcc-$(GCC_VERSION)
 
+GHDL_GCC_SYSTEM_SPECIFIC_OPTIONS = --enable-default-pie
+
 # Mingw32 specifics:
 MINGW64_SRC = $(TOOLCHAIN_SRC)/mingw-w64-v$(MINGW64_VERSION)

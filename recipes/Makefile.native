@@ -1,6 +1,7 @@
 include ../config.mk
 
-INSTALL_ROOT = /media/sandbox
+# You should customize INSTALL_ROOT in local_config.mk to install
+# to different than default
 
 # When changing this, you need to run 'mrproper'
 INSTALL_PREFIX = /usr
