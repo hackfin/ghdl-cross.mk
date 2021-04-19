@@ -22,6 +22,9 @@ case "$HOST_ISSUE" in
 	Linux\ Mint\ 18.3*)
 		OS=mint18_sylvia
 	;;
+	Linux\ Mint\ 20*)
+		OS=mint20_ulyana
+	;;
 	*) >&2 echo "$0: Unknown setup '$HOST_ISSUE'"
 	echo unknown
 	exit 1
